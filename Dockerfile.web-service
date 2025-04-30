@@ -1,0 +1,43 @@
+FROM centos:7
+
+# 1. Set up Zabbix repo and install web service
+RUN yum install -y https://repo.zabbix.com/zabbix/7.2/rhel/7/x86_64/zabbix-release-7.2-1.el7.noarch.rpm && \
+    yum clean all && \
+    yum install -y \
+        zabbix-web-service \
+        chromium \
+        chromium-headless \
+        fontconfig \
+        dejavu-sans-fonts \
+        libXcomposite \
+        libXcursor \
+        libXdamage \
+        libXrandr \
+        alsa-lib \
+        gtk3 \
+        ipa-gothic-fonts \
+        xorg-x11-fonts-Type1 \
+        xorg-x11-fonts-misc \
+        xorg-x11-fonts-75dpi \
+        xorg-x11-fonts-100dpi \
+        xorg-x11-utils \
+        tzdata && \
+    yum clean all
+
+# 2. Set Zabbix user
+USER zabbix
+
+# 3. Create directories for Chromium
+RUN mkdir -p /var/lib/zabbix/chrome && chmod -R 755 /var/lib/zabbix/chrome
+
+# 4. Environment for Chromium to work properly
+ENV CHROME_BIN=/usr/bin/chromium-browser
+ENV ZBX_CHROME_PATH=/usr/bin/chromium-browser
+ENV ZBX_CHROME_OPTS="--headless --no-sandbox --disable-gpu --disable-crash-reporter --user-data-dir=/var/lib/zabbix/chrome"
+ENV ZBX_DISABLE_COOKIES_PARSING=true
+
+# 5. Expose web service port
+EXPOSE 10053
+
+# 6. Entrypoint
+CMD ["/usr/sbin/zabbix_web_service", "-c", "/etc/zabbix/zabbix_web_service.conf"]
