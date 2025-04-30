@@ -3,7 +3,9 @@ FROM centos:7
 ENV ZABBIX_VERSION=7.2.6
 
 # Install EPEL and yum-utils first
-RUN yum install -y epel-release yum-utils \
+RUN yum install -y \
+    https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    yum-utils \
     && yum clean all
 
 # Add Zabbix repo
