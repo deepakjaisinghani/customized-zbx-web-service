@@ -12,11 +12,14 @@ RUN sed -i '/^#.*community/s/^#//' /etc/apk/repositories && \
         harfbuzz \
         ttf-freefont \
         dumb-init \
-    && mkdir -p /var/cache/chromium
+    && mkdir -p /var/cache/chromium/crashpad/database \
+    && chown -R zabbix:zabbix /var/cache/chromium/crashpad
 
 # Set Chromium path for Zabbix
 ENV CHROMIUM_BIN="/usr/bin/chromium-browser"
 ENV CHROME_CRASHPAD_DIR="/var/cache/chromium/crashpad"
+ENV CHROME_CRASHPAD_DATABASE="/var/cache/chromium/crashpad/database"
+ENV CHROMIUM_FLAGS="--enable-logging --v=1"
 
 # Verify installation
 RUN chromium-browser --version
