@@ -1,12 +1,12 @@
 FROM centos:7
 
-# Install EPEL repo first
-RUN yum install -y epel-release \
-    && yum clean all
+# Install EPEL repo manually
+RUN curl -o /tmp/epel-release-latest-7.noarch.rpm https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+    rpm -ivh /tmp/epel-release-latest-7.noarch.rpm && \
+    yum clean all
 
 # Install yum-utils and basic dependencies
-RUN yum install -y yum-utils \
-    && yum install -y wget curl \
+RUN yum install -y yum-utils wget curl \
     && yum clean all
 
 # Install font and X11 dependencies
