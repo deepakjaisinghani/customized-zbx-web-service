@@ -1,39 +1,37 @@
 FROM centos:7
 
-LABEL maintainer="deepak.jaisinghani@outlook.com"
-
 ENV ZABBIX_VERSION=7.2.6
 
-# Install EPEL and dependencies
-RUN yum install -y epel-release \
-    && yum install -y \
-       https://repo.zabbix.com/zabbix/${ZABBIX_VERSION}/rhel/7/x86_64/zabbix-release-${ZABBIX_VERSION}-1.el7.noarch.rpm \
-       yum-utils \
-    && yum-config-manager --enable zabbix-frontend \
+# Install EPEL and yum-utils first
+RUN yum install -y epel-release yum-utils \
     && yum clean all
 
-# Install Zabbix web service + Chromium and fonts
+# Add Zabbix repo
+RUN yum install -y https://repo.zabbix.com/zabbix/${ZABBIX_VERSION}/rhel/7/x86_64/zabbix-release-${ZABBIX_VERSION}-1.el7.noarch.rpm \
+    && yum clean all
+
+# Install Zabbix Web Service + Chromium and deps
 RUN yum install -y \
-       zabbix-web-service \
-       chromium \
-       fontconfig \
-       dejavu-sans-fonts \
-       libXcomposite \
-       libXcursor \
-       libXdamage \
-       libXrandr \
-       alsa-lib \
-       gtk3 \
-       ipa-gothic-fonts \
-       xorg-x11-fonts-Type1 \
-       xorg-x11-fonts-misc \
-       xorg-x11-fonts-75dpi \
-       xorg-x11-fonts-100dpi \
-       xorg-x11-utils \
-       tzdata \
+    zabbix-web-service \
+    chromium \
+    fontconfig \
+    dejavu-sans-fonts \
+    libXcomposite \
+    libXcursor \
+    libXdamage \
+    libXrandr \
+    alsa-lib \
+    gtk3 \
+    ipa-gothic-fonts \
+    xorg-x11-fonts-Type1 \
+    xorg-x11-fonts-misc \
+    xorg-x11-fonts-75dpi \
+    xorg-x11-fonts-100dpi \
+    xorg-x11-utils \
+    tzdata \
     && yum clean all
 
-# Set user for security
+# Optional: run as Zabbix user if required
 USER zabbix
 
 EXPOSE 10053
