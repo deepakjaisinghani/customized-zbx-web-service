@@ -30,4 +30,4 @@ jobs:
           context: .
           file: ./Dockerfile.web-service
           push: true
-          tags: deepakjaisinghani/zabbix-web-service:7.2.6-fixed02
+          tags: deepakjaisinghani/zabbix-web-service:7.2.6-fixed03
