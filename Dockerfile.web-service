@@ -1,7 +1,11 @@
 FROM zabbix/zabbix-web-service:alpine-7.2.6
 
-# Install Chromium and required fonts
-RUN apk add --no-cache \
+# Enable community repository
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/main" >> /etc/apk/repositories && \
+    echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/community" >> /etc/apk/repositories
+
+# Install Chromium and dependencies
+RUN apk update && apk add --no-cache \
     chromium \
     nss \
     freetype \
@@ -9,10 +13,8 @@ RUN apk add --no-cache \
     ttf-freefont \
     && mkdir -p /var/cache/chromium
 
-# Set Chromium binary path as Zabbix expects it
+# Set Chromium path for Zabbix
 ENV CHROMIUM_BIN="/usr/bin/chromium-browser"
 
-# Optional: Confirm versions
-RUN chromium-browser --version
-
-# Entrypoint already defined in base image
+# Optional: Check Chromium version
+RUN chromium-browser --headless --version
