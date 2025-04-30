@@ -1,20 +1,23 @@
 FROM zabbix/zabbix-web-service:alpine-7.2.6
 
-# Enable community repository
-RUN echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/main" >> /etc/apk/repositories && \
-    echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/community" >> /etc/apk/repositories
+USER root
 
-# Install Chromium and dependencies
-RUN apk update && apk add --no-cache \
-    chromium \
-    nss \
-    freetype \
-    harfbuzz \
-    ttf-freefont \
+# Add community repository for Chromium, and update package lists
+RUN sed -i '/^#.*community/s/^#//' /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache \
+        chromium \
+        nss \
+        freetype \
+        harfbuzz \
+        ttf-freefont \
+        dumb-init \
     && mkdir -p /var/cache/chromium
 
 # Set Chromium path for Zabbix
 ENV CHROMIUM_BIN="/usr/bin/chromium-browser"
 
-# Optional: Check Chromium version
-RUN chromium-browser --headless --version
+# Verify installation
+RUN chromium-browser --version
+
+USER zabbix
