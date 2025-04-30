@@ -1,6 +1,6 @@
 FROM centos:7
 
-RUN curl -o /tmp/epel-release-7-11.noarch.rpm http://mirror.centos.org/centos/7/epel/x86_64/e/epel-release-7-11.noarch.rpm && \
+RUN curl -o /tmp/epel-release-7-11.noarch.rpm https://vault.centos.org/7.9.2009/extras/x86_64/Packages/epel-release-7-11.noarch.rpm && \
     rpm -ivh /tmp/epel-release-7-11.noarch.rpm && \
     yum clean all
 
